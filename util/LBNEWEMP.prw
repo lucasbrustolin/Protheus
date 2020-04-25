@@ -208,3 +208,87 @@ If SM0->( DbSeek(  cCodEmp + cCodFil)) //-- Posiciona Empresa e filial
 EndIf  
 
 Return( lChange )
+
+
+#Include 'Protheus.ch'
+
+
+// -----------------------------------------------------------
+// EXEMPLO DE UTILIZACAO DA CLASSE  QUE FAZ A TROCA DE EMPRESA [ LbNewEmp ]
+// 
+// LbNewEmp():New()                         -- Instacia objeto 
+// LbNewEmp():SetEmp( Empresa, Filial )     -- Faz a troca de empresa
+// LbNewEmp():Restore( )                    -- Retorna para empresa de origem (Antes do SetEmp)
+// ----------------------------------------------------------
+
+User Function Teste001()
+
+Local oEmpresa := Nil 
+
+
+Begin Transaction
+
+    oEmpresa := LbNewEmp():New()
+
+    // ---------------------------------------------+
+    // ACESSA EMPRESA 01 E ALTERA O CAD DE CLIENTES |
+    // ---------------------------------------------+
+	If oEmpresa:SetEmp( "01", "06" )
+
+		If ( cEmpAnt == "01"  .And. cFilAnt = "06" )
+			
+			cNome :=   POSICIONE("SA1",1,xFilial("SA1")+ "002084068" ,"A1_NOME") 
+		
+			If !Empty( cNome )
+				
+				RecLock("SA1", .F. )
+				SA1->A1_NOME := AllTrim(cNome) + " x"
+				SA1->( MsUnLock() )
+
+			EndIf 
+
+
+		EndIf
+	Else 
+		FwAlertInfp( oEmpresa:Error,"Atencao" )
+	EndIf 
+
+    // ---------------------------------------------+
+    // ACESSA EMPRESA 02 E ALTERA O CAD DE CLIENTES |
+    // ---------------------------------------------+
+
+	If oEmpresa:SetEmp( "02", "01" )
+
+		If ( cEmpAnt == "02"  .And. cFilAnt = "01" )
+			
+			cNome :=   POSICIONE("SA1",1,xFilial("SA1")+ "001074099" ,"A1_NOME") 
+
+			If !Empty( cNome )
+				
+				RecLock("SA1", .F. )
+				SA1->A1_NOME := AllTrim(cNome) + " x"
+				SA1->( MsUnLock() )
+
+				// TESTE COM TRANSACTION
+				// --------------------------------------------------------------------+
+				// DESFAZ ALTERACOES DE AMBOS CADASTROS CLIENTES REF. EMPREESA 01 E 02 |
+				// --------------------------------------------------------------------+
+
+				//Forca o Disarm 
+				DisarmTransaction()
+
+			EndIf 
+
+		EndIf
+	Else 
+		FwAlertInfp( oEmpresa:Error,"Atencao" )
+	EndIf 
+
+    // ----------------------------------------------------------------------------+
+    // RESTAURA \ RETORNA PARA EMPRESA DE ORIGEM - PARA CONTINUAR O PROCESSAMENTO  |
+    // ----------------------------------------------------------------------------+
+	oEmpresa:Restore()
+
+End Transaction
+
+Return()
