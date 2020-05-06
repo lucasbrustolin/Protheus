@@ -5,6 +5,22 @@
 		}
 	],
 	"settings": {
-		"advpl.selectedEnvironment": "DSV"
+		"advpl.selectedEnvironment": "DEV17",
+		"advpl.environments": [
+			{
+				"environment": "DEV17",
+				"name": "DEV17",
+				"server": "localhost",
+				"port": "2301",
+				"serverVersion": "131227A",
+				"passwordCipher": "VlRCVjVxUG1kc2hWMHFvRk12anlnQUVrODFlNHJNOHI1VU5aUWJXVjRLZlJEQmtBS3dNRmNlWWFGOUZXemhwVmFQVVhVUFkvS1VYWUJvYXdkYjJUazFjS25kTXpoOVdaMmFqdGpzN2VUS2oyc3lzcjhYQUp1d002eSs0SU1YRHI=",
+				"includeList": "d:\\protheus\\include\\",
+				"user": "admin",
+				"smartClientPath": "d:\\protheus\\17\\bin\\smartclient",
+				"enable": true
+			}
+		],
+		"advpl.workspaceFolders": "d:\\git\\Protheus;",
+		"totvsLanguageServer.welcomePage": false
 	}
 }
